@@ -25,6 +25,8 @@ public class RequestConfigDemo {
                 .build();
         // 设置请求配置信息
         httpGet.setConfig(config);
+		
+		//添加一个注释
 
         CloseableHttpResponse response = null;
         try {
