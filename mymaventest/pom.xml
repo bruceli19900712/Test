@@ -1,0 +1,169 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.imooc</groupId>
+  <artifactId>mymaventest</artifactId>
+  <version>${project.release.version}</version>  
+  <name>mymaventest</name>
+  
+  
+ 	<!-- 集中定义依赖版本号 -->
+  <properties>
+		<tms.version>1.0.1-SNAPSHOT</tms.version>
+		<tms.war.version>1.0.0</tms.war.version>
+		<framework.version>2.1.0.RELEASE</framework.version>
+		<springframework.version>3.2.8.RELEASE</springframework.version>
+		<r_user.client.version>1.1.0-RELEASE</r_user.client.version>
+		<r_user.client.dubbo.version>1.1.0-RELEASE</r_user.client.dubbo.version>
+		<r_user.client.serviceId>017</r_user.client.serviceId>
+		<r_user.client.serviceVersion>1.0.0.RELEASE</r_user.client.serviceVersion>
+		<r_user.client.serviceType>1</r_user.client.serviceType>
+		
+		<s_user.client.version>1.0.1-SNAPSHOT</s_user.client.version>
+		<s_user.client.dubbo.version>1.0.1-SNAPSHOT</s_user.client.dubbo.version>
+		<s_user.client.serviceId>017</s_user.client.serviceId>
+		<s_user.client.serviceVersion>1.0.1</s_user.client.serviceVersion>
+		<s_user.client.serviceType>1</s_user.client.serviceType>
+		
+		<t_user.client.version>1.0.1-TEST</t_user.client.version>
+		<t_user.client.dubbo.version>1.0.1-TEST</t_user.client.dubbo.version>
+		<t_user.client.serviceId>017</t_user.client.serviceId>
+		<t_user.client.serviceVersion>1.0.1</t_user.client.serviceVersion>
+		<t_user.client.serviceType>1</t_user.client.serviceType>
+		
+		
+		<wx_framework.version>2.1.0.RELEASE</wx_framework.version>
+		<wx_user.client.version>1.1.0-RELEASE</wx_user.client.version>
+		
+		<s_app.dubbo.version>1.1.0-RELEASE</s_app.dubbo.version>
+		<wx_app.dubbo.version>1.1.0-RELEASE</wx_app.dubbo.version>
+		<dev_app.dubbo.version>1.0.0-SNAPSHOT</dev_app.dubbo.version>
+		<test_app.dubbo.version>1.0.0-SNAPSHOT-TEST</test_app.dubbo.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.release.version>0.1-SNAPSHOT</project.release.version>  
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<properties>
+				<project.release.version>0.1111</project.release.version>
+			</properties>
+		</profile>
+	</profiles> 
+
+  <!-- <dependencyManagement>和 <dependencies> 区别: 前者只是申明 不会引入指定的jar 一般在父工程中申明  子工程中显示引入-->
+    <dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>4.3.11.RELEASE</version>
+		</dependency>
+		<!-- String类型的数学表达式 -->
+		<dependency>
+				<groupId>org.beanshell</groupId>
+				<artifactId>bsh</artifactId>
+				<version>2.0b5</version>
+			</dependency>
+		</dependencies>
+	
+	
+	<!-- 仓库地址   -定义snapshots库和releases库的nexus地址  -->
+	<distributionManagement>
+		<!-- 正式发布地址 -->
+		<repository>
+			<id>nexus-releases</id>
+			<name>Nexus Release Repository</name>
+			<url>http://repos.anzhi.com:8081/nexus/content/repositories/releases/</url>
+		</repository>
+		<!-- 快照地址 -->
+		<snapshotRepository>
+			<id>nexus-snapshots</id>
+			<name>Nexus Snapshots Repository</name>
+			<url>http://repos.anzhi.com:8081/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
+	
+	<!-- 插件下载地址 如果本地仓库没有则去插件仓库下载  -->
+	<pluginRepositories>
+		<pluginRepository>
+			<id>public-plugin</id>
+			<name>public-plugin</name>
+			<url>http://repos.anzhi.com:8081/nexus/content/groups/public</url>
+			<releases>
+			</releases>
+			<!-- 仓库的快照版本下载关闭 -->
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+	
+	<!-- 编译的插件 -->
+	<build>
+		
+		<defaultGoal>install</defaultGoal>
+		<!--指定编译时存放的路径  -->
+		<directory>${basedir}/target</directory>
+		<!-- 指定编译时的jar包名称-版本 -->
+		<finalName>${artifactId}-${version}</finalName>
+		<!-- maven操作系统变量,添加一个系统变量,不用加入到path变量中-->
+		<!-- <finalName>${env.MAVENTESTVERSION}</finalName> -->
+		
+		<plugins>
+			<!-- compiler plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<!-- test plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>**/*Test*.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+			<!-- packaging plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.0.2</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- eclipse plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
