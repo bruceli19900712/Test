@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.imooc</groupId>
-  <artifactId>mymaventest</artifactId>
-  <version>${project.release.version}</version>  
-  <name>mymaventest</name>
-  
-  
- 	<!-- 集中定义依赖版本号 -->
-  <properties>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.imooc</groupId>
+	<artifactId>mymaventest</artifactId>
+	<version>${project.release.version}</version>
+	<name>mymaventest</name>
+
+
+	<!-- 集中定义依赖版本号 -->
+	<properties>
 		<tms.version>1.0.1-SNAPSHOT</tms.version>
 		<tms.war.version>1.0.0</tms.war.version>
 		<framework.version>2.1.0.RELEASE</framework.version>
@@ -17,42 +17,91 @@
 		<r_user.client.serviceId>017</r_user.client.serviceId>
 		<r_user.client.serviceVersion>1.0.0.RELEASE</r_user.client.serviceVersion>
 		<r_user.client.serviceType>1</r_user.client.serviceType>
-		
+
 		<s_user.client.version>1.0.1-SNAPSHOT</s_user.client.version>
 		<s_user.client.dubbo.version>1.0.1-SNAPSHOT</s_user.client.dubbo.version>
 		<s_user.client.serviceId>017</s_user.client.serviceId>
 		<s_user.client.serviceVersion>1.0.1</s_user.client.serviceVersion>
 		<s_user.client.serviceType>1</s_user.client.serviceType>
-		
+
 		<t_user.client.version>1.0.1-TEST</t_user.client.version>
 		<t_user.client.dubbo.version>1.0.1-TEST</t_user.client.dubbo.version>
 		<t_user.client.serviceId>017</t_user.client.serviceId>
 		<t_user.client.serviceVersion>1.0.1</t_user.client.serviceVersion>
 		<t_user.client.serviceType>1</t_user.client.serviceType>
-		
-		
+
+
 		<wx_framework.version>2.1.0.RELEASE</wx_framework.version>
 		<wx_user.client.version>1.1.0-RELEASE</wx_user.client.version>
-		
+
 		<s_app.dubbo.version>1.1.0-RELEASE</s_app.dubbo.version>
 		<wx_app.dubbo.version>1.1.0-RELEASE</wx_app.dubbo.version>
 		<dev_app.dubbo.version>1.0.0-SNAPSHOT</dev_app.dubbo.version>
 		<test_app.dubbo.version>1.0.0-SNAPSHOT-TEST</test_app.dubbo.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.release.version>0.1-SNAPSHOT</project.release.version>  
+		<project.release.version>0.1-SNAPSHOT</project.release.version>
 	</properties>
 
 	<profiles>
-		<profile>
-			<id>release</id>
-			<properties>
-				<project.release.version>0.1111</project.release.version>
-			</properties>
-		</profile>
-	</profiles> 
 
-  <!-- <dependencyManagement>和 <dependencies> 区别: 前者只是申明 不会引入指定的jar 一般在父工程中申明  子工程中显示引入-->
-    <dependencies>
+		<!-- 开发环境 -->
+		<profile>
+			<id>dev</id>
+			<activation>
+				<!--默认激活  -->
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<!-- <properties>:自己定义的一些属性  可有可无-->
+				<profiles.active>dev</profiles.active>
+			</properties>
+			<build>
+			    <!-- <filters>比较重要，指定当前profile环境下，属性文件路径； -->
+				<filters>
+					<filter>src/main/resources/dev.properties</filter>
+				</filters>
+			</build>
+		</profile>
+
+		<!-- 测试环境 -->
+		<profile>
+			<id>test</id>
+			<activation>
+				<!--默认不激活  -->
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<profiles.active>test</profiles.active>
+			</properties>
+			<build>
+				<filters>
+					<filter>src/main/resources/test.properties</filter>
+				</filters>
+			</build>
+		</profile>
+
+		<!-- 生产环境 -->
+		<profile>
+			<id>prod</id>
+			<activation>
+				<!--默认不激活  -->
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<profiles.active>prod</profiles.active>
+			</properties>
+			<build>
+				<filters>
+					<filter>src/main/resources/prod.properties</filter>
+				</filters>
+			</build>
+		</profile>
+	</profiles>
+
+
+
+	<!-- <dependencyManagement>和 <dependencies> 区别: 前者只是申明 不会引入指定的jar 一般在父工程中申明  子工程中显示引入-->
+	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -60,13 +109,13 @@
 		</dependency>
 		<!-- String类型的数学表达式 -->
 		<dependency>
-				<groupId>org.beanshell</groupId>
-				<artifactId>bsh</artifactId>
-				<version>2.0b5</version>
-			</dependency>
-		</dependencies>
-	
-	
+			<groupId>org.beanshell</groupId>
+			<artifactId>bsh</artifactId>
+			<version>2.0b5</version>
+		</dependency>
+	</dependencies>
+
+
 	<!-- 仓库地址   -定义snapshots库和releases库的nexus地址  -->
 	<distributionManagement>
 		<!-- 正式发布地址 -->
@@ -82,8 +131,8 @@
 			<url>http://repos.anzhi.com:8081/nexus/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
-	
-	
+
+
 	<!-- 插件下载地址 如果本地仓库没有则去插件仓库下载  -->
 	<pluginRepositories>
 		<pluginRepository>
@@ -98,18 +147,42 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-	
+
+
+
 	<!-- 编译的插件 -->
 	<build>
-		
-		<defaultGoal>install</defaultGoal>
+		<!-- <defaultGoal>install</defaultGoal> --><!-- 默认执行的命令 -->
 		<!--指定编译时存放的路径  -->
-		<directory>${basedir}/target</directory>
+		<!-- <directory>${basedir}/target</directory> -->
 		<!-- 指定编译时的jar包名称-版本 -->
-		<finalName>${artifactId}-${version}</finalName>
+		<finalName>${project.artifactId}-${project.version}</finalName>
 		<!-- maven操作系统变量,添加一个系统变量,不用加入到path变量中-->
 		<!-- <finalName>${env.MAVENTESTVERSION}</finalName> -->
+
+
+		<!--  mvn clean package -Ptest执行完以后直接查看target下面jar包的文件即可 -->
+		<resources>
+			<resource>
+				<!-- <directory>: 配置哪个目录下的文件通过${key}会被替换成属性值，resource目录下，我们一般放jdbc连接，或配置文件 -->
+				<directory>src/main/resources</directory>
+				
+				<!-- <includes>：指定那个目录下那个文件 -->
+				<includes>
+					<include>**/*</include>
+				</includes>
+				
+				<!-- <filtering>：这个配置的意思是过滤上面指定属性文件中的占位符，占位符是${变量名称}这样的形式，maven会自动读取配置文件，然后解析其中的占位符，使用上面pom文件中定义的属性进行替换 -->
+				<filtering>true</filtering>
+				<excludes>
+					<exclude>application-text.xml</exclude>
+				</excludes>
+			</resource>
+		</resources>
 		
+		
+		
+
 		<plugins>
 			<!-- compiler plugin -->
 			<plugin>
@@ -126,6 +199,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.7.1</version>
 				<configuration>
 					<includes>
 						<include>**/*Test*.java</include>
@@ -136,6 +210,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<archive>
 						<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
@@ -167,3 +242,6 @@
 		</plugins>
 	</build>
 </project>
+
+
+
