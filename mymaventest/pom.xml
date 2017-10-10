@@ -180,9 +180,6 @@
 			</resource>
 		</resources>
 		
-		
-		
-
 		<plugins>
 			<!-- compiler plugin -->
 			<plugin>
