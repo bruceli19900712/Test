@@ -1,1 +1,2 @@
-dev测试环境的MANIFEST.MF
+合并后的内容 MANIFEST.MF
+ 
