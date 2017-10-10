@@ -1,2 +1,1 @@
-合并后的内容 MANIFEST.MF
- 
+dev测试环境的MANIFEST.MF
